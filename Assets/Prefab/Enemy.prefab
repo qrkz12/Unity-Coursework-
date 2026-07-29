@@ -541,3 +541,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 100
+  healthBar: {fileID: 2830524336534951991}
