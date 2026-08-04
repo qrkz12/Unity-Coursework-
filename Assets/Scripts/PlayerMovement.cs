@@ -1,10 +1,12 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public float speed = 6f;
+    public float gravity = -20f;
+
     private CharacterController controller;
+    private float verticalVelocity;
 
     void Start()
     {
@@ -16,15 +18,28 @@ public class NewMonoBehaviourScript : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Vector3 move = new Vector3(x, 0, z);
+        Vector3 moveDirection = new Vector3(x, 0f, z);
+        moveDirection = Vector3.ClampMagnitude(moveDirection, 1f);
 
-      
+        // if (moveDirection != Vector3.zero)
+        // {
+        //     transform.forward = moveDirection;
+        // }
 
-        controller.Move(move * speed * Time.deltaTime);
+        if (controller.isGrounded && verticalVelocity < 0f)
+        {
+            verticalVelocity = -2f;
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime;
+        }
 
-       
-       
-}
+        Vector3 horizontalMovement = moveDirection * speed;
+        Vector3 verticalMovement = Vector3.up * verticalVelocity;
 
-
+        controller.Move(
+            (horizontalMovement + verticalMovement) * Time.deltaTime
+        );
+    }
 }

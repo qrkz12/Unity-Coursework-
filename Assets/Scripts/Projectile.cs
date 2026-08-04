@@ -2,15 +2,30 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public float speed = 12f;
+    public int damage = 25;
+    public float lifetime = 5f;
+
+    private Rigidbody rigidBody;
+
     void Start()
     {
-        
+        rigidBody = GetComponent<Rigidbody>();
+
+        rigidBody.linearVelocity = transform.forward * speed;
+
+        Destroy(gameObject, lifetime);
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnCollisionEnter(Collision collision)
     {
-        
+        EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+
+        if (enemyHealth != null)
+        {
+            enemyHealth.TakeDamage(damage);
+        }
+
+        Destroy(gameObject);
     }
 }
