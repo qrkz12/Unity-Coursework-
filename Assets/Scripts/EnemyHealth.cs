@@ -12,17 +12,27 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
 
-        healthBar.maxValue = maxHealth;
-        healthBar.value = currentHealth;
+        if (healthBar != null)
+        {
+            healthBar.minValue = 0;
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
+        }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
-        healthBar.value = currentHealth;
+        Debug.Log(
+            $"{gameObject.name} took {damage} damage. " +
+            $"Health remaining: {currentHealth}"
+        );
 
-        Debug.Log($"{gameObject.name} took {damage} damage. Health remaining: {currentHealth}");
+        if (healthBar != null)
+        {
+            healthBar.value = currentHealth;
+        }
 
         if (currentHealth <= 0)
         {

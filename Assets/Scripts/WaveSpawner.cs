@@ -1,50 +1,95 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
-    
+    [Header("Enemy Spawning")]
     public GameObject enemyPrefab;
-
-    
     public Transform[] spawnPoints;
 
-   
-    public int startingEnemies = 3; // first wave
+    [Header("Wave Settings")]
+    public int startingEnemies = 3;
+    public int extraEnemiesPerWave = 1;
+    public float timeBetweenWaves = 8f;
 
-    
-    public float timeBetweenWaves = 10f;
+    [Header("Level Settings")]
+    public int[] wavesPerLevel = { 3, 5 };
 
-    private int currentWave = 1;
-    private int enemiesToSpawn;
+    [Header("UI")]
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI waveText;
 
-    void Start()
+    private int currentLevelIndex;
+    private int currentWaveInLevel;
+    private int totalWavesCompleted;
+
+    private void Start()
     {
-        enemiesToSpawn = startingEnemies;
+        currentLevelIndex = 0;
+        currentWaveInLevel = 0;
+        totalWavesCompleted = 0;
 
-        
-        Invoke(nameof(SpawnWave), 2f);
+        UpdateUI();
+
+        StartCoroutine(LevelAndWaveLoop());
     }
 
-    void SpawnWave()
+    private IEnumerator LevelAndWaveLoop()
     {
-          for (int i = 0; i < enemiesToSpawn; i++)
-    {
-        SpawnEnemy();
-    }
+        // Brief delay before the first wave.
+        yield return new WaitForSeconds(2f);
+
+        while (currentLevelIndex < wavesPerLevel.Length)
         {
-            SpawnEnemy();
+            int wavesInCurrentLevel =
+                wavesPerLevel[currentLevelIndex];
+
+            while (currentWaveInLevel < wavesInCurrentLevel)
+            {
+                currentWaveInLevel++;
+
+                UpdateUI();
+
+                int enemiesThisWave =
+                    startingEnemies +
+                    totalWavesCompleted * extraEnemiesPerWave;
+
+                Debug.Log(
+                    $"Level {currentLevelIndex + 1}, " +
+                    $"Wave {currentWaveInLevel}/{wavesInCurrentLevel}: " +
+                    $"spawning {enemiesThisWave} enemies"
+                );
+
+                SpawnWave(enemiesThisWave);
+
+                totalWavesCompleted++;
+
+                yield return new WaitForSeconds(timeBetweenWaves);
+            }
+
+            // Current level has been completed.
+            Debug.Log($"Level {currentLevelIndex + 1} complete");
+
+            currentLevelIndex++;
+            currentWaveInLevel = 0;
+
+            if (currentLevelIndex < wavesPerLevel.Length)
+            {
+                UpdateUI();
+
+                // Longer break between levels.
+                yield return new WaitForSeconds(5f);
+            }
         }
 
-        
-        enemiesToSpawn++;
+        levelText.text = "All Levels Complete";
+        waveText.text = "";
 
-        currentWave++;
-
-       
-        Invoke(nameof(SpawnWave), timeBetweenWaves);
+        Debug.Log("All levels complete");
     }
 
-    void SpawnEnemy()
+    private void SpawnWave(int enemyCount)
     {
         if (enemyPrefab == null)
         {
@@ -58,15 +103,47 @@ public class WaveSpawner : MonoBehaviour
             return;
         }
 
-        // Pick one of the spawn points randomly
-        int randomIndex = Random.Range(0, spawnPoints.Length);
+        for (int i = 0; i < enemyCount; i++)
+        {
+            SpawnEnemy();
+        }
+    }
 
-        Transform chosenSpawnPoint = spawnPoints[randomIndex];
+    private void SpawnEnemy()
+    {
+        int randomIndex =
+            Random.Range(0, spawnPoints.Length);
+
+        Transform selectedSpawnPoint =
+            spawnPoints[randomIndex];
 
         Instantiate(
             enemyPrefab,
-            chosenSpawnPoint.position,
-            chosenSpawnPoint.rotation
+            selectedSpawnPoint.position,
+            selectedSpawnPoint.rotation
         );
+    }
+
+    private void UpdateUI()
+    {
+        if (currentLevelIndex >= wavesPerLevel.Length)
+        {
+            return;
+        }
+
+        int displayedLevel = currentLevelIndex + 1;
+        int displayedWave = currentWaveInLevel;
+        int wavesInLevel = wavesPerLevel[currentLevelIndex];
+
+        if (levelText != null)
+        {
+            levelText.text = $"Level {displayedLevel}";
+        }
+
+        if (waveText != null)
+        {
+            waveText.text =
+                $"Wave {displayedWave} / {wavesInLevel}";
+        }
     }
 }

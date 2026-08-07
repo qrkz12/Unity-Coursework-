@@ -392,6 +392,9 @@ GameObject:
   - component: {fileID: 4454821021954517169}
   - component: {fileID: 5802045737217280008}
   - component: {fileID: 2275635133911860886}
+  - component: {fileID: -6464081143866549445}
+  - component: {fileID: -9078189251105271753}
+  - component: {fileID: -7537766601341861839}
   m_Layer: 0
   m_Name: RangedEnemy
   m_TagString: Untagged
@@ -529,3 +532,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 100
   healthBar: {fileID: 2830524336534951991}
+--- !u!114 &-6464081143866549445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135268621701099094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4489f98d8fce8cf4d88c2c206e19a7ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
+  preferredDistance: 7
+  distanceTolerance: 1
+  retreatDistance: 3
+  timeBetweenShots: 2
+--- !u!114 &-9078189251105271753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135268621701099094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e72ed991e13af14985013853ef117ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 100
+  healthBar: {fileID: 0}
+--- !u!114 &-7537766601341861839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135268621701099094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d418fefdc3e4b448aae76e3d91a3381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShoot
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
